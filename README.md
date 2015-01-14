@@ -1,5 +1,5 @@
 # CoffeeRecs
-## Andrew Bachman - Brew Better, LLC
+#### Andrew Bachman - Brew Better, LLC
 
 This project will generate recommendations for coffees based on a users taste. The data used will be generated from twitter, as well as several other coffee related data sources. We will seek to generate recomendations based on a users past coffees, his reviews on those coffees and the comparisions. This project will be accessible via an HTTP API with routes to be defined later.
 
