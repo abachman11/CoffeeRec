@@ -8,4 +8,4 @@ These instructions should be kept up to date. The instructions should include al
 ## Milestones
 #### 1. <a href="https://github.com/abachman11/CoffeeRecs/milestones/Milestone%201">Milestone 1 Prototyping</a> 1/14-1/21
 
-Andrew Bachman - Brew Better, LLC 2014
+Andrew Bachman - 2014
