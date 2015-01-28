@@ -19,7 +19,8 @@ class CoffeePipeline(object):
     def __init__(self):
         if 'RETHINK_AUTH_KEY' in os.environ:
             self.db_config['auth_key'] = os.environ['RETHINK_AUTH_KEY']
-            self.db_config['host'] = 'http://betterbrews.cloudapp.net'
+        if 'RETHINK_HOST' in os.environ:
+            self.db_config['host'] = os.environ['RETHINK_HOST']
 
     def process_item(self, item, spider):
         m = hashlib.sha1();
