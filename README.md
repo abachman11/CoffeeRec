@@ -10,7 +10,7 @@ These instructions should be kept up to date. The instructions should include al
 
 ## Milestones
 #### 1. <a href="https://github.com/abachman11/CoffeeRecs/milestones/Milestone%201">Milestone 1 Prototyping</a> 1/14-1/21
-#### 1. <a href="https://github.com/abachman11/CoffeeRec/issues?q=milestone%3A%22Build+Cycle+1%22">Milestone 3</a>
+#### 1. <a href="https://github.com/abachman11/CoffeeRec/issues?q=milestone%3A%22Build+Cycle+1%22">Milestone 2</a>
 #### 1. <a href="https://github.com/abachman11/CoffeeRec/milestones/Build%20Cycle%202">Milestone 3</a>
 
 Andrew Bachman - 2014
