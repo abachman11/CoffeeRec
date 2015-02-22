@@ -6,9 +6,19 @@ There are a huge number of coffee roasters and different coffees to choose from.
 
 
 ## Building and Running the project
-These instructions should be kept up to date. The instructions should include all information needed to build/run the project (e.g., install nodejs, install Java 1.8.x, etc.). Anyone with reasonable computer knowledge should be able to checkout, build, run, and use your project by reading your clear and thorough directions. Make sure that you include examples of how to "use" your project after it is running (e.g., don't end with "Right-click, run as->Java Application").
+### Scrapers
+Scrapers have been written for various coffee roasters. These will be used to populate database of coffees, which will then be used to direct the data collection from twitter. To run the scrapers install scrapy as instructed <a href="http://scrapy.org/">here</a>. The easiest way to accomplish this is using the python package mananger pip and the command  `pip install scrapy`. 
+To run the scrapers use the command `scrapy crawl scraper_name`. To use the scraper, needs to be running (Default port 3001 on localhost). Currently to change the database location, the location must be changed in the scrapers/pipelines.py file.
+
+### Web Application
+The user interface is available at <a href="http://brewbetter.meteor.com">brewbetter.meteor.com</a>.
+### Data Analysis 
+The data analysis and twitter mining files are currently in ipython notebooks. To view and run these, run `ipython notebook` at the command line and direct your browser to localhost:8080
 
 ## Milestones
 #### 1. <a href="https://github.com/abachman11/CoffeeRecs/milestones/Milestone%201">Milestone 1 Prototyping</a> 1/14-1/21
+#### 1. <a href="https://github.com/abachman11/CoffeeRec/issues?q=milestone%3A%22Build+Cycle+1%22">Milestone 2</a>
+#### 1. <a href="https://github.com/abachman11/CoffeeRec/milestones/Build%20Cycle%202">Milestone 3</a>
+#### 1. <a href="https://github.com/abachman11/CoffeeRec/milestones/Build%20Cycle%203">Milestone 4 - Build Cycle 3</a>
 
 Andrew Bachman - 2014
