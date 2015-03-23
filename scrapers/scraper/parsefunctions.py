@@ -18,7 +18,7 @@ def _safe_pop(selector):
     else:
         value = selector
 
-def clean_scrape_generator(field, selector):
+def clean_scrape_generator(field):
     ''' clean_scrape_generator -
         params: field - the name of the field contained in selector
                 selector - the selector containing the text of the content
@@ -34,7 +34,7 @@ def clean_scrape_generator(field, selector):
             'key': field,
             'content': clean_value
         }
-def split_scrape_generator(selector, split_character, content_index, key_index=-1, field=""):
+def split_scrape_generator(split_character, content_index, key_index=-1, field=""):
     ''' split_scrape_generator
         params:
             selector - the selector containing the text that will be split to yield
@@ -60,7 +60,7 @@ def split_scrape_generator(selector, split_character, content_index, key_index=-
             'key': key,
             'content': split_list[content_index]
         }
-def nested_xpath_scrape_generator(selector, content_xpath, key_xpath):
+def nested_xpath_scrape_generator(content_xpath, key_xpath):
     ''' nested_xpath_scrape_generator
         params:
             selector - the selector containing the content and the key
