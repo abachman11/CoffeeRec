@@ -13,10 +13,11 @@ class Coffee(scrapy.Item):
     # name = scrapy.Field()
     _id = scrapy.Field()
     name = scrapy.Field()
-    price = scrapy.Field()
     roaster = scrapy.Field()
     description = scrapy.Field()
     origin = scrapy.Field();
     tasting_notes = scrapy.Field();
-    price_unit = scrapy.Field();
+    varietal = scrapy.Field();
+    elevation = scrapy.Field();
+    producer = scrapy.Field();
     verified = scrapy.Field();
