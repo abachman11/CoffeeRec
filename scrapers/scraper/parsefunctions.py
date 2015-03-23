@@ -30,10 +30,8 @@ def clean_scrape_generator(field):
         data = _safe_extract(selector)
         value = _safe_pop(selector)
         clean_value = value.strip()
-        return {
-            'key': field,
-            'content': clean_value
-        }
+        return (field, clean_value)
+
 def split_scrape_generator(split_character, content_index, key_index=-1, field=""):
     ''' split_scrape_generator
         params:
@@ -56,10 +54,8 @@ def split_scrape_generator(split_character, content_index, key_index=-1, field="
         split_list = clean_value.split(split_character)
         if key_index != -1:
             key = split_list[key_index]
-        return {
-            'key': key,
-            'content': split_list[content_index]
-        }
+        return (key, split_list[content_index])
+
 def nested_xpath_scrape_generator(content_xpath, key_xpath):
     ''' nested_xpath_scrape_generator
         params:
@@ -76,7 +72,4 @@ def nested_xpath_scrape_generator(content_xpath, key_xpath):
         key_selector = selector.xpath(key_xpath)
         content = _safe_pop(_safe_extract(content_selector))
         key = _safe_pop(_safe_extract(content_selector))
-        return {
-            'key': key,
-            'content': content
-        }
+        return (key, content)

@@ -6,50 +6,29 @@ from scraper.parseutils import ParseUtils
 
 
 class CoffeeSpider(CrawlSpider):
-    name = 'coffeescraper'
-    allowed_domains = ['counterculturecoffee.com']
-    start_urls = ['https://counterculturecoffee.com/store/coffee']
-    roaster = dict(
-        name="Counter Culture",
-        id="xxxx-xxxx"
-    )
+    name = 'CoffeeScraper'
+    allowed_domains = []
+    start_urls = []
+    roaster = ''
+    rules = list()
 
     def __init__(self, *a, **kw):
-        ParseUtils.parse_config(self.get_config())
+        self.parse_utils = ParseUtils(CoffeeSpider, self.get_config(), 'parse_item')
         print CoffeeSpider.mConfig
-        CoffeeSpider.rules = ();
+        self.rules = ();
         super(CoffeeSpider, self).__init__(*a, **kw)
 
     def get_config(self):
-        print "SHOULD OVERRIDE GET CONFIG"
+        raise Exception("Config Error", "get_config should be overriden")
         return
-
-
-    # allow=("/store/*"), deny=("/store/brewing", "*/store/merchandise", "/store")
-    rules = (   Rule(SgmlLinkExtractor(allow=("/store/coffee\?p=\d+"))),
-                Rule(SgmlLinkExtractor(allow=("/store/coffee/*"),
-                                       restrict_xpaths=('//h2[@class="product-name"]')),
-                                    callback='parse_item'))
 
     def parse_item(self, response):
         self.log("Scraping %s" % response.url)
 
         sel = Selector(response)
+        results = self.parse_utils.process_response(sel)
 
         item = Coffee()
-        h1 = sel.xpath('//div[@class="product-name"]/h1/text()').extract().pop().split(u'\u2013 ')
-        if len(h1) < 2:
-          h1 = h1[0].split(u' - ')
-        item['name'] = h1[0];
-        item['tasting_notes'] = (sel.xpath('//*[@class="product-short-description"]/text()')
-                                    .extract()
-                                    .pop()
-                                    .strip())
-
-        item['description'] = reduce((lambda x, y: x + y),
-            sel.xpath('//div[@id="accordion"]/div[1]/div/text()').extract(), u'')
-        item['origin'] = reduce((lambda x, y: x + y),
-            sel.xpath('//div[@id="accordion"]/h3[text()="Place"]/following-sibling::div/div/text()').extract(),
-            u'').strip()
-        item['roaster'] = self.roaster
+        for key, content in results:
+            item[key] = content
         return item

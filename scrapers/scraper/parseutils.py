@@ -13,8 +13,8 @@ class ParseUtils:
     def process_response(self, response):
         ''' process_response - evaluates a page based on the response from
             a downloaded web page based on the rules given.
-            returns a list of dictionarys with all of the field name and the content
-            that was parsed from the page
+            returns a list of tuples with each entry continaing the field name
+            and the content that was parsed from the page
         '''
         response = [
             self._evaluate_rule(response, rule) for rule in self.content_rules
