@@ -10,12 +10,10 @@ class CoffeeSpider(CrawlSpider):
     allowed_domains = []
     start_urls = []
     roaster = ''
-    rules = list()
+    rules = ()
 
     def __init__(self, *a, **kw):
         self.parse_utils = ParseUtils(CoffeeSpider, self.get_config(), 'parse_item')
-        print CoffeeSpider.mConfig
-        self.rules = ();
         super(CoffeeSpider, self).__init__(*a, **kw)
 
     def get_config(self):
@@ -27,8 +25,10 @@ class CoffeeSpider(CrawlSpider):
 
         sel = Selector(response)
         results = self.parse_utils.process_response(sel)
+        print "results: ", results
 
         item = Coffee()
         for key, content in results:
-            item[key] = content
+            if isinstance(key, basestring) and key != '':
+                item[key] = content
         return item

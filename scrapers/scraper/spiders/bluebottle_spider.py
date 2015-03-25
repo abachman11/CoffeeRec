@@ -1,34 +1,42 @@
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.selector import Selector
-from scraper.items import Coffee
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+# -*- coding: utf-8 -*-
+from scraper.spiders.coffeescraper import CoffeeSpider
 
-class BluebottleSpider(CrawlSpider):
-    name = 'bluebottlecoffee'
-    allowed_domains = ['bluebottlecoffee.com']
-    start_urls = ['https://bluebottlecoffee.com/store/coffee']
-    roaster = dict(
-        name="Blue Bottle Coffee",
-        id="xxxx-xxxx"
-    )
+class BluebottleSpider(CoffeeSpider):
+    name = 'bluebottle'
 
-    # allow=("/store/*"), deny=("/store/brewing", "*/store/merchandise", "/store")
-    rules = (Rule(SgmlLinkExtractor(allow=("/store/*",),
-                                    restrict_xpaths=('//*[@class="span3 product"]/child::*')),
-                                    callback='parse_item'),)
-
-    def parse_item(self, response):
-        self.log("Scraping %s" % response.url)
-
-        sel = Selector(response)
-
-        item = Coffee()
-        item['name'] = sel.xpath('//h2/text()').extract().pop()
-        item['tasting_notes'] = sel.xpath('//h2/following-sibling::*/text()').extract().pop()
-        item['price'] = sel.xpath('//h3[@class="your-price"]/text()').extract().pop()
-        item['price_unit'] = sel.xpath('//h3[@class="your-price"]/div[@class="variant-description"]/text()').extract()
-        item['description'] = sel.xpath('//*[@class="long-overview hidden"]/text()').extract()
-        if not 'description' in item or not item['description']:
-            item['description'] = sel.xpath('//*[@class="long-overview"]/text()').extract()
-        item['roaster'] = self.roaster
-        return item
+    def get_config(self):
+        return {
+            'name': 'bluebottle',
+            'allowed_domains': ['bluebottlecoffee.com'],
+            'start_urls': ['https://bluebottlecoffee.com/store/coffee'],
+            'page_rules': [
+                {
+                    'allow': "/store/*",
+                    'restrict_xpaths': '//*[@class="span3 product"]/child::*'
+                }
+            ],
+            'content_rules': [
+                {
+                    'xpath':'//h2/text()',
+                    'field': {
+                        'name': 'name'
+                    }
+                }, {
+                    'xpath': '//*[@class="long-overview hidden"]/text()',
+                    'field': {
+                        'name': 'description'
+                    }
+                }, {
+                    'xpath': '/',
+                    'field': {
+                        'name': 'roaster'
+                    },
+                    'constant': 'Blue Bottle Coffee'
+                }, {
+                    'xpath': '//h2/following-sibling::*/text()',
+                    'field': {
+                        'name': 'tasting_notes'
+                    }
+                }
+            ]
+        }

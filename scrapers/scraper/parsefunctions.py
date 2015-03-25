@@ -3,11 +3,12 @@ def _safe_extract(selector):
         Takes a selector and performs an extract if it is callable and returns
         the result else returns the selector
     '''
-    if 'extract' in selector and callable(selector.extract):
+    try:
         data = selector.extract()
-    else:
+    except Exception:
         data = selector
     return data
+
 def _safe_pop(selector):
     ''' _safe_pop
         Takes a selector and returns the first value if it is a list and
@@ -15,8 +16,23 @@ def _safe_pop(selector):
     '''
     if type(selector) is list and len(selector) > 0:
         value = selector.pop()
+    elif type(selector) is list and len(selector) == 0:
+        return ''
     else:
         value = selector
+    return value
+
+def _check_key(key):
+    if not isinstance(key, basestring):
+        raise Exception("Invaid Key", key)
+
+def constant_scrape_generator(field, value):
+    ''' constant_scrape_generator - populates a field value that is constant
+        for all documents in a scraper
+    '''
+    def constant_scrape(selector):
+        return (field, value)
+    return constant_scrape
 
 def clean_scrape_generator(field):
     ''' clean_scrape_generator -
@@ -28,9 +44,10 @@ def clean_scrape_generator(field):
     '''
     def clean_scrape(selector):
         data = _safe_extract(selector)
-        value = _safe_pop(selector)
+        value = _safe_pop(data)
         clean_value = value.strip()
         return (field, clean_value)
+    return clean_scrape
 
 def split_scrape_generator(split_character, content_index, key_index=-1, field=""):
     ''' split_scrape_generator
@@ -48,13 +65,23 @@ def split_scrape_generator(split_character, content_index, key_index=-1, field="
     '''
     def split_scrape(selector):
         data = _safe_extract(selector)
-        value = _safe_pop(selector)
+        value = _safe_pop(data)
         clean_value = value.strip()
         key = field
-        split_list = clean_value.split(split_character)
+        if type(split_character) is list:
+            split_list = [clean_value]
+            for split_char in split_character:
+                next_split = list()
+                for item in split_list:
+                    next_split.extend(item.split(split_char))
+                split_list = next_split
+        else:
+            split_list = clean_value.split(split_character)
         if key_index != -1:
             key = split_list[key_index]
+        _check_key(key)
         return (key, split_list[content_index])
+    return split_scrape
 
 def nested_xpath_scrape_generator(content_xpath, key_xpath):
     ''' nested_xpath_scrape_generator
@@ -71,5 +98,6 @@ def nested_xpath_scrape_generator(content_xpath, key_xpath):
         content_selector = selector.xpath(content_xpath)
         key_selector = selector.xpath(key_xpath)
         content = _safe_pop(_safe_extract(content_selector))
-        key = _safe_pop(_safe_extract(content_selector))
+        key = _safe_pop(_safe_extract(key_selector))
         return (key, content)
+    return nested_xpath_scrape
