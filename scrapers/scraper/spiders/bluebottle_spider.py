@@ -17,7 +17,7 @@ class BluebottleSpider(CoffeeSpider):
             ],
             'content_rules': [
                 {
-                    'xpath':'//h2/text()',
+                    'xpath':'//div/h2/text()',
                     'field': {
                         'name': 'name'
                     }
@@ -33,7 +33,7 @@ class BluebottleSpider(CoffeeSpider):
                     },
                     'constant': 'Blue Bottle Coffee'
                 }, {
-                    'xpath': '//h2/following-sibling::*/text()',
+                    'xpath': '//h3[@class="tagline"]/text()',
                     'field': {
                         'name': 'tasting_notes'
                     }
