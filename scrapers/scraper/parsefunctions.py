@@ -95,9 +95,12 @@ def nested_xpath_scrape_generator(content_xpath, key_xpath):
             parsing functiont that takes a selector and returns a ParseResult object
     '''
     def nested_xpath_scrape(selector):
-        content_selector = selector.xpath(content_xpath)
-        key_selector = selector.xpath(key_xpath)
-        content = _safe_pop(_safe_extract(content_selector))
-        key = _safe_pop(_safe_extract(key_selector))
-        return (key, content)
+        result = list()
+        for sel in selector:
+            content_selector = selector.xpath(content_xpath)
+            key_selector = selector.xpath(key_xpath)
+            content = _safe_pop(_safe_extract(content_selector))
+            key = _safe_pop(_safe_extract(key_selector))
+            result.append((key, content))
+        return result
     return nested_xpath_scrape

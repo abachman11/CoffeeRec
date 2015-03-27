@@ -1,13 +1,18 @@
 from pymongo import MongoClient
 from math import sqrt
 
-class Recommendations:
+class RecommendationEngine:
 
     def __init__(self, config):
         self.config = config
         self.mongo = MongoClient(config['host'], config['port'])
         self.db = self.mongo[config['database']]
         self.tweets = self.db[config['tweets_db']]
+        self.coffees = self.db[config['coffees_db']]
+
+    # Get a coffee by id helper function for demo probably want to do a better in
+    def get_coffee_by_id(self, id):
+      return self.coffees.find_one(id)
 
     # Returns a dicionary of a user's ratings of a coffee
     # Currently all the ratings are binary based on whether the user has
@@ -38,7 +43,6 @@ class Recommendations:
 
         num = sumProducts - (sum1 * sum2) / n
         den = sqrt( sum1sq - pow(sum1, 2) / n ) * sqrt( sum2sq - pow(sum2, 2) / n)
-        print num, den
         if den == 0: return 0
         return num / den
 
@@ -46,10 +50,8 @@ class Recommendations:
     # between them
     def cosine_similarity(self, set1, set2):
         sim = 0
-        print set1, set2
         if len(set1) != 0 and len(set2) != 0:
             intersection = set(set1.keys()) & set(set2.keys())
-            print intersection
             sim = len(intersection) / (sqrt(len(set1)) * sqrt(len(set2)))
         return sim
 
@@ -67,17 +69,16 @@ class Recommendations:
             if user != user_name:
                 compare_items = self.getUserRatings(user)
                 similarity = self.cosine_similarity(user_items, compare_items)
-
                 if similarity > 0:
                     unrated_set = set(compare_items.keys()) - set(user_items.keys())
                     for item in unrated_set:
                         totals.setdefault(item, 0)
                         similaritySum.setdefault(item, 0)
-                        totals[item] += compare_items[item] * similarity
+                        totals[item] += (compare_items[item] * similarity)
                         similaritySum[item] += similarity
 
         rankings = [ (total / similaritySum[item], item) for item, total in totals.items() ]
 
         rankings.sort()
         rankings.reverse()
-        return rankings
+        return rankings[0:5]

@@ -132,13 +132,13 @@ class ParseUtils:
             name and the content that was parsed for that field
         '''
         selector = response.xpath(rule['xpath'])
+        print "selector", selector
         result = rule['parse_function'](selector)
         if isinstance(result, list):
-            return [(rule['key_dict'][key], content) for key, content in result]
+            return [(rule['key_dict'][key], content) for key, content in result if key in rule['key_dict']]
         else:
             key, content = result
-            print "key, content", key, content
-            if isinstance(key, basestring) and key != "":
+            if isinstance(key, basestring) and key in rule['key_dict'] and content != '':
                 return [(rule['key_dict'][key], content)]
             else:
                 return [(None, None)]
